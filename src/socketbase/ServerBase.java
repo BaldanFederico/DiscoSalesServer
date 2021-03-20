@@ -7,6 +7,7 @@ package socketbase;
 
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,42 +22,64 @@ public class ServerBase {
 
     public ServerBase(int port) {
         this.port = port;
-        if(!startServer())
-            System.out.println("errore in fase di creazione");
-    }
 
-    private boolean startServer() {
-        try {
-            SS = new ServerSocket(port);
-        } catch (IOException ex) {
-            Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-        System.out.println("Server creato con successo");
-        return true;
     }
 
     public void runServer() {
+      
+        String nome, password, Email;
+        String scrivi;
+        Scanner sc = new Scanner(System.in);
+        String protocollo;
+        String risposta;
+        gestione g = new gestione();
+        genera g2 = new genera();
         try {
+            SS = new ServerSocket(port);
+            System.out.println("Server creato con successo");
+            System.out.println("in attesa di richieste");
+            Socket s = SS.accept();
+            System.out.println("Un client connesso!!!");
 
-            while (true) {
-                System.out.println("Server in attesa di richieste...");
+            PrintWriter scrittore = new PrintWriter(s.getOutputStream(), true);
+            BufferedReader ricevi = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            risposta = "";
+            scrivi = "";
+             g.usersStoraging();
+            do {
 
-                Socket client = SS.accept();
-                System.out.println("Un client connesso!!!");
+                protocollo = ricevi.readLine();
+                System.out.println(protocollo);
+                switch (protocollo) {
+                    case "signUP":
+                        g.CreateFolder();
+                        nome = ricevi.readLine();
+                        password = ricevi.readLine();
+                        Email = ricevi.readLine();
+                        risposta = g.salvaUtenti(nome, password, Email);
+                        scrittore.println(risposta);
+                        g2.mandaMail();  //bisogna aggiungere la parte dell'invio
+                        break;
+                    case "log":
+                        nome = ricevi.readLine();
+                        password = ricevi.readLine();
+                        risposta = g.autenticazione(nome, password);
+                        scrittore.println(risposta);
+                        break;
+                    case "secure":
 
-                OutputStream versoIlClient = client.getOutputStream();
-                BufferedWriter bw = new BufferedWriter(
-                        new OutputStreamWriter(versoIlClient));
+                        String codice = ricevi.readLine();
+                        scrittore.println(g.verificaAccount(codice));
 
-                bw.write("Ciao bello sono il server!");
+                        break;
 
-                bw.close();
-                client.close();
+                }
+            } while (!protocollo.equals("exit"));
 
-                System.out.println("Chiusura connessione effettuata");
-            }
-
+            //aspetta il messaggio del client
+            ricevi.close();
+            scrittore.close();
+            s.close();
         } catch (IOException ex) {
             Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
         }
