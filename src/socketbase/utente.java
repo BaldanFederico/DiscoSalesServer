@@ -18,7 +18,6 @@ public class utente {
     private String Email;
     private String codice;
     private boolean stato;
-    private Scanner sc = new Scanner(System.in);
 
   
 
