@@ -97,7 +97,7 @@ public class gestione {
             br = new BufferedReader(new FileReader(f));
             s = br.readLine();
             while (s != null) {
-                salva = s.split(" ");
+                salva = s.split(";");
                 nome = salva[0];
                 password = salva[1];
                 Email = salva[2];

@@ -7,6 +7,7 @@ package socketbase;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +22,8 @@ public class ServerBase {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        ArrayList<serverAction> socket = new ArrayList();
+
         try {
             ServerSocket server = new ServerSocket(6666);  //stabilisce la porta
             System.out.println("Server è attivo e in ascolto");
@@ -29,8 +32,8 @@ public class ServerBase {
                 Socket client = server.accept();
                 System.out.println("connessione ricevuta, ora se la smazza il thread");
                 Thread Serverino = new Thread(new serverAction(client));
+                socket.add(new serverAction(client));
                 Serverino.start();
-
             }
 
         } catch (IOException ex) {
