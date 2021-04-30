@@ -45,10 +45,14 @@ public class serverAction implements Runnable {
             System.out.println("Un client connesso!!!");
 
             PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
+            
             BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+          
             risposta = "";
             scrivi = "";
+           
             g.usersStoraging();
+            System.out.println("prova1");
             do {
 
                 protocollo = ricevi.readLine();  //riceve dal client 

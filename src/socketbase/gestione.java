@@ -93,6 +93,7 @@ public class gestione {
         String[] salva;
         String s;
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\utenti.txt");
+
         if (f.exists()) {
             br = new BufferedReader(new FileReader(f));
             s = br.readLine();
@@ -106,8 +107,11 @@ public class gestione {
 
                 utente.add(new utente(nome, password, Email, codice, stato));
                 s = br.readLine();
+                System.out.println("prova2");
             }
-
+             
+            System.out.println("prova4");
+            br.close();
         }
 
     }
@@ -124,11 +128,11 @@ public class gestione {
     private void scrivi() throws IOException {
         bw = new BufferedWriter(new FileWriter(f));
         for (int i = 0; i < utente.size(); i++) {
-            bw.write(utente.get(i).getNome() + " ");
-            bw.write(utente.get(i).getPassword() + " ");
-            bw.write(utente.get(i).getEmail() + " ");
-            bw.write(utente.get(i).getCodice() + " ");
-            bw.write(utente.get(i).getStato() + " ");
+            bw.write(utente.get(i).getNome() + ";");
+            bw.write(utente.get(i).getPassword() + ";");
+            bw.write(utente.get(i).getEmail() + ";");
+            bw.write(utente.get(i).getCodice() + ";");
+            bw.write(utente.get(i).getStato() + ";");
             bw.newLine();
             bw.flush();
 

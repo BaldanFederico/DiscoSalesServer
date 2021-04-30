@@ -22,7 +22,7 @@ public class ServerBase {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ArrayList<serverAction> socket = new ArrayList();
+       ArrayList<serverAction> socket = new ArrayList();
 
         try {
             ServerSocket server = new ServerSocket(6666);  //stabilisce la porta
