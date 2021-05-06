@@ -32,6 +32,38 @@ public class genera {
 
     }
 
+    public String GetKeyRoom() {  //serve per comunicare con gli altri utenti all'interno di una room
+
+        Random r = new Random();
+        String randomString = "";
+        int length = 10;
+        char[] text = new char[length];
+
+        for (int x = 0; x < text.length; x++) {
+            text[x] = caratteri.charAt(r.nextInt(caratteri.length()));
+            randomString += text[x];
+        }
+        return randomString;
+
+    }
+
+        public String GetIdMOmentaneo() {  //serve per comunicare con gli altri utenti all'interno di una room
+
+        Random r = new Random();
+        String randomString = "";
+        int length = 10;
+        char[] text = new char[length];
+
+        for (int x = 0; x < text.length; x++) {
+            text[x] = caratteri.charAt(r.nextInt(caratteri.length()));
+            randomString += text[x];
+        }
+        return randomString;
+
+    }
+
+    
+    
     public void mandaMail() {
 
 //

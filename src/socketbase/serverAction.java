@@ -77,7 +77,8 @@ public class serverAction implements Runnable {
 
                         String codice = ricevi.readLine();
                         scrittore.println(g.verificaAccount(codice));
-
+                    case "enterAccount":
+                        
                         break;
 
                 }

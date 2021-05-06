@@ -25,7 +25,7 @@ public class gestione {
     private BufferedReader br;
     private File f;
     private String userName = System.getProperty("user.name");
-
+    
     public String salvaUtenti(String nome, String password, String Email) throws IOException {
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\utenti.txt");
         for (int i = 0; i < utente.size(); i++) {
@@ -41,16 +41,19 @@ public class gestione {
     }
 
     public String autenticazione(String nome, String password) {
-        for (int i = 0; i < utente.size(); i++) {
+        ServerBase sb=new ServerBase();
+       for (int i = 0; i < utente.size(); i++) {
             if (utente.get(i).getNome().equals(nome) && utente.get(i).getPassword().equals(password)) {
                 if (utente.get(i).getStato() == false) {
 
                     return "questo account non è stato ancora attivato, andare sulla sezione attiva account per l'attivazione";
 
                 } else {
-
+//                invio di un protocollo che permette di cambiare scena al cliente
                     return "autenticazione avvenuta con successo";
-
+                     
+                    
+                   
                 }
 
             }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -18,11 +19,13 @@ import java.util.logging.Logger;
  */
 public class ServerBase {
 
+    Socket client;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       ArrayList<serverAction> socket = new ArrayList();
+        ArrayList<serverAction> socket = new ArrayList();
 
         try {
             ServerSocket server = new ServerSocket(6666);  //stabilisce la porta
