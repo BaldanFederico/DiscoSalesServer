@@ -24,8 +24,9 @@ public class gestione {
     private BufferedWriter bw;
     private BufferedReader br;
     private File f;
+    private String entra;
     private String userName = System.getProperty("user.name");
-    
+
     public String salvaUtenti(String nome, String password, String Email) throws IOException {
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\utenti.txt");
         for (int i = 0; i < utente.size(); i++) {
@@ -41,19 +42,18 @@ public class gestione {
     }
 
     public String autenticazione(String nome, String password) {
-        ServerBase sb=new ServerBase();
-       for (int i = 0; i < utente.size(); i++) {
+        ServerBase sb = new ServerBase();
+        for (int i = 0; i < utente.size(); i++) {
             if (utente.get(i).getNome().equals(nome) && utente.get(i).getPassword().equals(password)) {
                 if (utente.get(i).getStato() == false) {
 
                     return "questo account non è stato ancora attivato, andare sulla sezione attiva account per l'attivazione";
 
                 } else {
+                    setEntra("enterAccount");
 //                invio di un protocollo che permette di cambiare scena al cliente
                     return "autenticazione avvenuta con successo";
-                     
-                    
-                   
+
                 }
 
             }
@@ -112,7 +112,7 @@ public class gestione {
                 s = br.readLine();
                 System.out.println("prova2");
             }
-             
+
             System.out.println("prova4");
             br.close();
         }
@@ -141,6 +141,14 @@ public class gestione {
 
         }
         bw.close();
+    }
+
+    public void setEntra(String entra) {
+        this.entra = entra;
+    }
+
+    public String getEntra() {
+        return entra;
     }
 
 }

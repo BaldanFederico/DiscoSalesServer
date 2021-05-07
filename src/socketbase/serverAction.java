@@ -38,24 +38,27 @@ public class serverAction implements Runnable {
         gestione g = new gestione();
         genera g2 = new genera();
         try {
-           
+
             System.out.println("Server creato con successo");
             System.out.println("in attesa di richieste");
-            
+
             System.out.println("Un client connesso!!!");
 
             PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
-            
+
             BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-          
+
             risposta = "";
             scrivi = "";
-           
+
             g.usersStoraging();
             System.out.println("prova1");
             do {
 
                 protocollo = ricevi.readLine();  //riceve dal client 
+                if (g.getEntra().equals("enterAccount")) {
+                    protocollo = "enterAccount";
+                }
                 System.out.println(protocollo);
                 switch (protocollo) {
                     case "signUP":
@@ -78,7 +81,9 @@ public class serverAction implements Runnable {
                         String codice = ricevi.readLine();
                         scrittore.println(g.verificaAccount(codice));
                     case "enterAccount":
-                        
+                        Thread profilo = new Thread(new serverAction(clientSocket));
+                        profilo.start();
+
                         break;
 
                 }
