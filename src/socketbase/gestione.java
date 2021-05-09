@@ -151,4 +151,9 @@ public class gestione {
         return entra;
     }
 
+    //metodo che legge nel file contenente gli id degli utenti con le rispettive room appartenenti
+    
+    
+    
+    
 }
