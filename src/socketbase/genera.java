@@ -32,7 +32,7 @@ public class genera {
 
     }
 
-    public String GetKeyRoom() {  //serve per comunicare con gli altri utenti all'interno di una room
+    public String GetRoomID() {  //serve per comunicare con gli altri utenti all'interno di una room
 
         Random r = new Random();
         String randomString = "";

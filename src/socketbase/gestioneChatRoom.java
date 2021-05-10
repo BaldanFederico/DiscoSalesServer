@@ -42,7 +42,7 @@ public class gestioneChatRoom implements Runnable {
         String partecipante;
         String risposta = "";
         String scrivi = "";
-        
+        genera g=new genera();
         System.out.println("prova1");
         try {
             PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -58,20 +58,19 @@ public class gestioneChatRoom implements Runnable {
                 switch (protocollo) {
                     case "create":          //crea una nuova room
                         owner = ricevi.readLine(); //vuole l'id univoco del client
-                        RoomID = ricevi.readLine();
                         partecipante = owner;
                         nomeRoom = ricevi.readLine();
-                        
-                        room.add(new Room(clientSocket, nomeRoom, owner, RoomID, partecipante));  //vuole la server socket appartenente nome proprietario con il nome utente
-                        writeRoom();
+                        room.add(new Room(clientSocket, nomeRoom, owner,g.GetRoomID() , partecipante));  //vuole la server socket appartenente nome proprietario con il nome utente
+                        writeRoom();//salvo i dati della room all'interno di un file
                         break;
-                    case "e2":  //aggiungi un membro
+                    case "e2":  //cerca la room
                         risposta = ricevi.readLine();
                         for (int i = 0; i < room.size(); i++) {
                             if (room.get(i).getRoomID().equals(risposta)) {
                                 partecipante = ricevi.readLine();
                                 room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));//aggiunge un partecipante 
                                 scrittore.println(room.get(i).getNomeRoom()); //manda al cliet il nome della room
+                                
                             }
                         }
                         break;
@@ -117,7 +116,7 @@ public class gestioneChatRoom implements Runnable {
         for (int i = 0; i < room.size(); i++) {
             if (room.get(i).getPartecipante().equals(risposta)) {
                 scrittore.println(room.get(i).getNomeRoom());
-              
+                
             }
         }
         
