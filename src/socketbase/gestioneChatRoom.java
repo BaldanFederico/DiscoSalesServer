@@ -23,16 +23,16 @@ import java.util.logging.Logger;
  * @author dell
  */
 public class gestioneChatRoom implements Runnable {
-
+    
     private Socket clientSocket;
     ArrayList<Room> room = new ArrayList();
     private genera g = new genera();
     private File f;
-
+    
     public gestioneChatRoom(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
-
+    
     @Override
     public void run() {
         String protocollo;
@@ -42,17 +42,17 @@ public class gestioneChatRoom implements Runnable {
         String partecipante;
         String risposta = "";
         String scrivi = "";
-
+        
         System.out.println("prova1");
         try {
             PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
-
+            
             BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             //andiamo a fare un retrive
             risposta = ricevi.readLine();
             Controlla(risposta);
             do {
-
+                
                 protocollo = ricevi.readLine();  //riceve dal client
                 System.out.println(protocollo);
                 switch (protocollo) {
@@ -61,7 +61,7 @@ public class gestioneChatRoom implements Runnable {
                         RoomID = ricevi.readLine();
                         partecipante = owner;
                         nomeRoom = ricevi.readLine();
-
+                        
                         room.add(new Room(clientSocket, nomeRoom, owner, RoomID, partecipante));  //vuole la server socket appartenente nome proprietario con il nome utente
                         writeRoom();
                         break;
@@ -76,13 +76,13 @@ public class gestioneChatRoom implements Runnable {
                         }
                         break;
                     case "e":
-
+                    
                     case "e7":
-
+                        
                         break;
-
+                    
                 }
-
+                
             } while (!protocollo.equals("exit"));
 
             //aspetta il messaggio del client
@@ -90,10 +90,10 @@ public class gestioneChatRoom implements Runnable {
             scrittore.close();
             clientSocket.close();
         } catch (IOException ex) {
-
+            
         }
     }
-
+    
     private void writeRoom() throws IOException {  //serve tenere traccia dei vari delle room
         String userName = System.getProperty("user.name");
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\RoomRoute.txt");
@@ -106,26 +106,25 @@ public class gestioneChatRoom implements Runnable {
             bw.write(room.get(i).getPartecipante() + ";");
             bw.newLine();
             bw.flush();
-
+            
         }
         bw.close();
     }
-
+    
     private void Controlla(String risposta) throws IOException {
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
-
+        
         for (int i = 0; i < room.size(); i++) {
-            if (room.get(i).getRoomID().equals(risposta)) {
+            if (room.get(i).getPartecipante().equals(risposta)) {
                 scrittore.println(room.get(i).getNomeRoom());
-                scrittore.println(room.get(i));
+              
             }
         }
-
+        
     }
-
-    private void MandaPartecipante() throws IOException {
-        PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
-       
     
+    private void MandaPartecipante() throws IOException {  //serve per mandare tutti i paretecipanti di quella room al client
+        PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
+        
     }
 }

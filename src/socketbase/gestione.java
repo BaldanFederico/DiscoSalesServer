@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 
 /**
@@ -41,8 +44,10 @@ public class gestione {
         return "registrazione avvenuta con successo";
     }
 
-    public String autenticazione(String nome, String password) {
+    public String autenticazione(String nome, String password) throws IOException {
         ServerBase sb = new ServerBase();
+
+
         for (int i = 0; i < utente.size(); i++) {
             if (utente.get(i).getNome().equals(nome) && utente.get(i).getPassword().equals(password)) {
                 if (utente.get(i).getStato() == false) {
@@ -52,7 +57,7 @@ public class gestione {
                 } else {
                     setEntra("enterAccount");
 //                invio di un protocollo che permette di cambiare scena al cliente
-                    return "autenticazione avvenuta con successo";
+                    return "enterAccount";//protocollo permette di cambiare la scena del client
 
                 }
 
@@ -152,8 +157,4 @@ public class gestione {
     }
 
     //metodo che legge nel file contenente gli id degli utenti con le rispettive room appartenenti
-    
-    
-    
-    
 }
