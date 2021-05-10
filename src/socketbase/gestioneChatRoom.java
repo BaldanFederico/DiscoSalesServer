@@ -48,6 +48,7 @@ public class gestioneChatRoom implements Runnable {
             PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
 
             BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            //andiamo a fare un retrive
             risposta = ricevi.readLine();
             Controlla(risposta);
             do {
@@ -69,7 +70,7 @@ public class gestioneChatRoom implements Runnable {
                         for (int i = 0; i < room.size(); i++) {
                             if (room.get(i).getRoomID().equals(risposta)) {
                                 partecipante = ricevi.readLine();
-                                room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));
+                                room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));//aggiunge un partecipante 
                                 scrittore.println(room.get(i).getNomeRoom()); //manda al cliet il nome della room
                             }
                         }
@@ -93,15 +94,16 @@ public class gestioneChatRoom implements Runnable {
         }
     }
 
-    private void writeRoom() throws IOException {
+    private void writeRoom() throws IOException {  //serve tenere traccia dei vari delle room
         String userName = System.getProperty("user.name");
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\RoomRoute.txt");
-        BufferedWriter bw = new BufferedWriter(new FileWriter(f, true));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(f));
         f.createNewFile();
         for (int i = 0; i < room.size(); i++) {
-            bw.write(room.get(i) + ";");
             bw.write(room.get(i).getNomeRoom() + ";");
             bw.write(room.get(i).getOwner() + ";");
+            bw.write(room.get(i).getRoomID() + ";");
+            bw.write(room.get(i).getPartecipante() + ";");
             bw.newLine();
             bw.flush();
 
@@ -115,9 +117,15 @@ public class gestioneChatRoom implements Runnable {
         for (int i = 0; i < room.size(); i++) {
             if (room.get(i).getRoomID().equals(risposta)) {
                 scrittore.println(room.get(i).getNomeRoom());
+                scrittore.println(room.get(i));
             }
         }
 
     }
 
+    private void MandaPartecipante() throws IOException {
+        PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
+       
+    
+    }
 }
