@@ -66,11 +66,12 @@ public class gestioneChatRoom implements Runnable {
                         writeRoom();//salvo i dati della room all'interno di un file
                         break;
                     case "e2":  //cerca la room
-                        risposta = ricevi.readLine();
+                        RoomID = ricevi.readLine();
                         for (int i = 0; i < room.size(); i++) {
-                            s = true;
-                            if (room.get(i).getRoomID().equals(risposta)) {
-                                //se l'utente si vuole unire entra dentro
+
+                            if (room.get(i).getRoomID().equals(RoomID)) {
+                                s = true;
+                                scrittore.write(room.get(i).getNomeRoom());                             //se l'utente si vuole unire entra dentro
                                 if (risposta.equals("si")) { //la stringa che il client gli invia prmendo un bottone
                                     partecipante = ricevi.readLine();
                                     room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));//aggiunge un partecipante 
