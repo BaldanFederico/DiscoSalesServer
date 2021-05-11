@@ -55,9 +55,11 @@ public class serverAction implements Runnable {
             System.out.println("prova1");
             do {
 
-                protocollo = ricevi.readLine();  //riceve dal client 
+                //riceve dal client 
                 if (g.getEntra().equals("enterAccount")) {
                     protocollo = "enterAccount";
+                } else {
+                    protocollo = ricevi.readLine();
                 }
                 System.out.println(protocollo);
                 switch (protocollo) {
