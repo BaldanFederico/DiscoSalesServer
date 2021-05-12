@@ -27,6 +27,8 @@ public class gestioneChatRoom implements Runnable {
     Vector<Room> room = new Vector();
     private genera g = new genera();
     private File f;
+    
+    
 
     public gestioneChatRoom(Socket clientSocket) {
         this.clientSocket = clientSocket;
