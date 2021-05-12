@@ -62,17 +62,17 @@ public class gestioneChatRoom implements Runnable {
                         partecipante = ricevi.readLine();
                         nomeRoom = ricevi.readLine();
                         room.add(new Room(clientSocket, nomeRoom, owner, g.GetRoomID(), partecipante));  //vuole la server socket appartenente nome proprietario con il nome utente
-                        scrittore.write(room.lastElement().getRoomID());//solo il proprietario può 
+                        scrittore.write(room.lastElement().getRoomID());//solo il proprietario può sapere l'id
                         writeRoom();//salvo i dati della room all'interno di un file
                         break;
-                    case "e2":  //cerca la room
+                    case "search":  //cerca la room
                         RoomID = ricevi.readLine();
                         for (int i = 0; i < room.size(); i++) {
 
                             if (room.get(i).getRoomID().equals(RoomID)) {
                                 s = true;
                                 scrittore.write(room.get(i).getNomeRoom());                             //se l'utente si vuole unire entra dentro
-                                if (risposta.equals("si")) { //la stringa che il client gli invia prmendo un bottone
+                                if (risposta.equals("entr")) { //la stringa che il client gli invia prmendo un bottone
                                     partecipante = ricevi.readLine();
                                     room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));//aggiunge un partecipante 
                                     scrittore.println(room.get(i).getNomeRoom()); //manda al cliet il nome della room
