@@ -5,7 +5,7 @@
  */
 package server;
 
-import java.net.Socket;
+import java.net.*;
 import java.util.*;
 
 /**
