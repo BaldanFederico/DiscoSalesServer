@@ -25,7 +25,7 @@ public class ServerBase {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ArrayList<serverAction> socket = new ArrayList();
+        ArrayList<ServerAction> socket = new ArrayList();
 
         try {
             ServerSocket server = new ServerSocket(6666);  //stabilisce la porta
@@ -34,13 +34,13 @@ public class ServerBase {
             while (true) {
                 Socket client = server.accept();
                 System.out.println("connessione ricevuta, ora se la smazza il thread");
-                Thread Serverino = new Thread(new serverAction(client));
-                socket.add(new serverAction(client));
+                Thread Serverino = new Thread(new ServerAction(client));
+                socket.add(new ServerAction(client));
                 Serverino.start();
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(serverAction.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServerAction.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
