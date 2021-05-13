@@ -6,7 +6,7 @@
 package socketbase;
 
 import java.net.Socket;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  *
