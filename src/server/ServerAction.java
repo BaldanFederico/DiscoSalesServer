@@ -21,6 +21,7 @@ import java.util.logging.Logger;
  */
 public class ServerAction implements Runnable {
 
+
     private Socket clientSocket;
 
     public ServerAction(Socket clientSocket) {
@@ -33,7 +34,7 @@ public class ServerAction implements Runnable {
         String nome, password, Email;
         String scrivi;
         Scanner sc = new Scanner(System.in);
-        String protocollo;
+        String protocollo = null;
         String risposta;
         Gestione g = new Gestione();
         Genera g2 = new Genera();
@@ -57,8 +58,7 @@ public class ServerAction implements Runnable {
 
                 //riceve dal client 
                 if (g.getEntra() == "enterAccount") {
-                    protocollo = "enterAccount";
-
+                         protocollo="enterAccount";
                 } else {
 
                     protocollo = ricevi.readLine();
@@ -74,7 +74,7 @@ public class ServerAction implements Runnable {
                         risposta = g.salvaUtenti(nome, password, Email); //salva tutto nell'oggetto
                         scrittore.println(risposta);
                         g2.mandaMail();  //bisogna aggiungere la parte dell'invio
-                        
+
                         break;
                     case "log":
                         nome = ricevi.readLine();
@@ -86,11 +86,12 @@ public class ServerAction implements Runnable {
 
                         String codice = ricevi.readLine();
                         scrittore.println(g.verificaAccount(codice));
+                        break;
+
                     case "enterAccount":
                         System.out.println("enterAccount");
-                        Thread profilo = new Thread(new ServerAction(clientSocket));
-                        profilo.start();
-
+                        GestioneChatRoom profilo = new GestioneChatRoom(clientSocket);
+                        profilo.gestisci();
                         break;
 
                 }
@@ -99,11 +100,11 @@ public class ServerAction implements Runnable {
             //aspetta il messaggio del client
             ricevi.close();
             scrittore.close();
-            clientSocket.close();
         } catch (IOException ex) {
             Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
+
 
 }
