@@ -21,10 +21,10 @@ import java.util.logging.Logger;
  *
  * @author dell
  */
-public class GestioneChatRoom implements Runnable {
+public class GestioneChatRoom {
 
     private Socket clientSocket;
-    Vector<Room> room = new Vector();
+    private Vector<Room> room = new Vector();
     private Genera g = new Genera();
     private File f;
 
@@ -32,8 +32,8 @@ public class GestioneChatRoom implements Runnable {
         this.clientSocket = clientSocket;
     }
 
-    @Override
-    public void run() {
+    public void gestisci() {
+        System.out.println("sei nella gestione account 1");
         Boolean s = false;
         String protocollo;
         String RoomID;
@@ -49,9 +49,11 @@ public class GestioneChatRoom implements Runnable {
 
             BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             //andiamo a fare un retrive
-            risposta = ricevi.readLine();
+            risposta = ricevi.readLine();//riceve il nome utente
+            System.out.println("sei nella gestione account 1");
             Controlla(risposta);
             //in questa parte serve member
+            System.out.println("sei nella gestione account 2");
             do {
 
                 protocollo = ricevi.readLine();  //riceve dal client
@@ -72,11 +74,12 @@ public class GestioneChatRoom implements Runnable {
                             if (room.get(i).getRoomID().equals(RoomID)) {
                                 s = true;
                                 scrittore.write(room.get(i).getNomeRoom());                             //se l'utente si vuole unire entra dentro
+                                risposta = ricevi.readLine();
                                 if (risposta.equals("entr")) { //la stringa che il client gli invia prmendo un bottone
-                                    partecipante = ricevi.readLine();
+                                    partecipante = ricevi.readLine();//
                                     room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));//aggiunge un partecipante 
                                     scrittore.println(room.get(i).getNomeRoom()); //manda al cliet il nome della room
-                                    scrittore.println(room.get(i).getOwner());//manda il proprietario
+                                    scrittore.println(room.get(i).getOwner());
                                     MandaPartecipante(i);//una volta che l'utente è dentro serve a l'utente sapere tutti i partecipanti di quella room
                                     writeRoom(); //scrivo la room per un eventuale shutdown del server 
                                 }
@@ -123,11 +126,13 @@ public class GestioneChatRoom implements Runnable {
 
     private void Controlla(String risposta) throws IOException { //serve quando in cliant accede al suo account con già dei progressi fatti 
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
-
+        System.out.println("controlla");
         for (int i = 0; i < room.size(); i++) {
+
             if (room.get(i).getPartecipante().equals(risposta)) {
-                scrittore.println(room.get(i).getNomeRoom());
-                MandaPartecipante(i);
+                scrittore.println(room.get(i).getNomeRoom());//manda prima il nome
+                scrittore.println(room.get(i).getOwner());
+                MandaPartecipante(i);//poi manda i partecipanti
 
             }
         }
@@ -136,7 +141,6 @@ public class GestioneChatRoom implements Runnable {
 
     private void MandaPartecipante(int c) throws IOException {  //serve per mandare tutti i paretecipanti di quella room al client
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
-        scrittore.println("member");//sta per ricevere tutti i partecipanti di quella room
         for (int i = 0; i < room.size(); i++) {
             if (room.get(i).getRoomID().equals(room.get(c).getRoomID())) {
                 scrittore.println(room.get(i).getPartecipante());
