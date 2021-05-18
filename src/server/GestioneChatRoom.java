@@ -39,7 +39,7 @@ public class GestioneChatRoom {
         String RoomID;
         String nomeRoom;
         String owner;
-        String partecipante = null;
+        String partecipante;
         String risposta = "";
         String scrivi = "";
         Genera g = new Genera();
@@ -90,8 +90,8 @@ public class GestioneChatRoom {
                         break;
                     case "delt":
                         rimuoviUtente();
-                    case "e7":
-
+                    case "":
+                        RoomID = ricevi.readLine();
                         break;
 
                 }
@@ -161,5 +161,17 @@ public class GestioneChatRoom {
 
     }
 
-   
+    private void gestioneMessaggi(String risposta) throws IOException {
+
+        for (int i = 0; i < room.size(); i++) {
+
+            if (room.get(i).getRoomID().equals(risposta)) {
+                PrintWriter scrittore = new PrintWriter(room.get(i).getClientSocket().getOutputStream(), true);
+                scrittore.println(risposta);
+
+            }
+        }
+
+    }
+
 }

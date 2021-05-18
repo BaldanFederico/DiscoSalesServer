@@ -45,4 +45,8 @@ public class Room {
         return partecipante;
     }
 
+    public Socket getClientSocket() {
+        return clientSocket;
+    }
+
 }
