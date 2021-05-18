@@ -64,7 +64,7 @@ public class GestioneChatRoom {
                         partecipante = ricevi.readLine();
                         nomeRoom = ricevi.readLine();
                         room.add(new Room(clientSocket, nomeRoom, owner, g.GetRoomID(), partecipante));  //vuole la server socket appartenente nome proprietario con il nome utente
-                        scrittore.write(room.lastElement().getRoomID());//solo il proprietario può sapere l'id
+                        scrittore.println(room.lastElement().getRoomID());//solo il proprietario può sapere l'id
                         writeRoom();//salvo i dati della room all'interno di un file
                         break;
                     case "search":  //cerca la room
@@ -88,8 +88,8 @@ public class GestioneChatRoom {
                             }
                         }
                         break;
-                    case "e":
-
+                    case "delt":
+                        rimuoviUtente();
                     case "e7":
 
                         break;
@@ -147,4 +147,19 @@ public class GestioneChatRoom {
             }
         }
     }
+
+    private void rimuoviUtente() throws IOException {
+        PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
+        BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        String partecipante = ricevi.readLine();
+        for (int i = 0; i < room.size(); i++) {
+            if (room.get(i).getPartecipante().equals(partecipante)) {
+                room.remove(i);
+
+            }
+        }
+
+    }
+
+   
 }
