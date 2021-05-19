@@ -8,6 +8,7 @@ package server;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,6 +28,7 @@ public class GestioneChatRoom {
     private Vector<Room> room = new Vector();
     private Genera g = new Genera();
     private File f;
+    private String userName = System.getProperty("user.name");
 
     public GestioneChatRoom(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -73,7 +75,7 @@ public class GestioneChatRoom {
 
                             if (room.get(i).getRoomID().equals(RoomID)) {
                                 s = true;
-                                scrittore.write(room.get(i).getNomeRoom());                             //se l'utente si vuole unire entra dentro
+                                scrittore.println(room.get(i).getNomeRoom());                             //se l'utente si vuole unire entra dentro
                                 risposta = ricevi.readLine();
                                 if (risposta.equals("entr")) { //la stringa che il client gli invia prmendo un bottone
                                     partecipante = ricevi.readLine();//
@@ -108,11 +110,12 @@ public class GestioneChatRoom {
     }
 
     private void writeRoom() throws IOException {  //serve tenere traccia dei vari delle room
-        String userName = System.getProperty("user.name");
+
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\RoomRoute.txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
         f.createNewFile();
         for (int i = 0; i < room.size(); i++) {
+            bw.write(room.get(i).getClientSocket() + ";");
             bw.write(room.get(i).getNomeRoom() + ";");
             bw.write(room.get(i).getOwner() + ";");
             bw.write(room.get(i).getRoomID() + ";");
@@ -144,6 +147,9 @@ public class GestioneChatRoom {
         for (int i = 0; i < room.size(); i++) {
             if (room.get(i).getRoomID().equals(room.get(c).getRoomID())) {
                 scrittore.println(room.get(i).getPartecipante());
+                if (i == room.size() - 1) {
+                    scrittore.println("stop");
+                }
             }
         }
     }
@@ -174,4 +180,32 @@ public class GestioneChatRoom {
 
     }
 
+    private void retriveRoomData() throws IOException {
+        String nomeRoom, owner, RoomID, partecipante;
+       
+        BufferedReader br = new BufferedReader(new FileReader(f));
+        String[] salva;
+        String s;
+        f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\RoomRoute.txt");
+
+        if (f.exists()) {
+
+            s = br.readLine();
+            while (s != null) {
+                salva = s.split(";");
+                
+                nomeRoom = salva[0];
+                owner = salva[1];
+                RoomID = salva[2];
+                partecipante = salva[3];
+
+                room.add(new Room(clientSocket, nomeRoom, owner, RoomID, partecipante));
+                s = br.readLine();
+                System.out.println("prova2");
+            }
+
+            System.out.println("prova4");
+            br.close();
+        }
+    }
 }
