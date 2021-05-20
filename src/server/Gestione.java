@@ -45,7 +45,6 @@ public class Gestione {
     }
 
     public String autenticazione(String nome, String password) throws IOException {
-        ServerBase sb = new ServerBase();
         System.out.println("dentro il metodo");
 
         for (int i = 0; i < utente.size(); i++) {

@@ -80,7 +80,7 @@ public class GestioneChatRoom {
                                 if (risposta.equals("entr")) { //la stringa che il client gli invia prmendo un bottone
                                     partecipante = ricevi.readLine();//
                                     room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));//aggiunge un partecipante 
-                                    scrittore.println(room.get(i).getNomeRoom()); //manda al cliet il nome della room
+                                    scrittore.println(room.get(i).getNomeRoom());
                                     scrittore.println(room.get(i).getOwner());
                                     MandaPartecipante(i);//una volta che l'utente è dentro serve a l'utente sapere tutti i partecipanti di quella room
                                     writeRoom(); //scrivo la room per un eventuale shutdown del server 
@@ -92,10 +92,13 @@ public class GestioneChatRoom {
                         break;
                     case "delt":
                         rimuoviUtente();
-                    case "":
+                    case "":  //serve per la chat
                         RoomID = ricevi.readLine();
                         break;
-
+                    case "chatData": //serve al client per recuperare i dati del server 
+                        partecipante = ricevi.readLine();
+                        Controlla(partecipante);
+                        break;
                 }
 
             } while (!protocollo.equals("exit"));
@@ -137,6 +140,8 @@ public class GestioneChatRoom {
                 scrittore.println(room.get(i).getOwner());
                 MandaPartecipante(i);//poi manda i partecipanti
 
+            } else if (i == room.size() - 1) {
+                scrittore.println("stop");
             }
         }
 
@@ -147,9 +152,9 @@ public class GestioneChatRoom {
         for (int i = 0; i < room.size(); i++) {
             if (room.get(i).getRoomID().equals(room.get(c).getRoomID())) {
                 scrittore.println(room.get(i).getPartecipante());
-                if (i == room.size() - 1) {
-                    scrittore.println("stop");
-                }
+
+            } else if (i == room.size() - 1) {
+            scrittore.println("stop");
             }
         }
     }
@@ -182,7 +187,7 @@ public class GestioneChatRoom {
 
     private void retriveRoomData() throws IOException {
         String nomeRoom, owner, RoomID, partecipante;
-       
+
         BufferedReader br = new BufferedReader(new FileReader(f));
         String[] salva;
         String s;
@@ -193,7 +198,7 @@ public class GestioneChatRoom {
             s = br.readLine();
             while (s != null) {
                 salva = s.split(";");
-                
+
                 nomeRoom = salva[0];
                 owner = salva[1];
                 RoomID = salva[2];

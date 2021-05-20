@@ -100,6 +100,7 @@ public class ServerAction implements Runnable {
             //aspetta il messaggio del client
             ricevi.close();
             scrittore.close();
+            clientSocket.close();
         } catch (IOException ex) {
             Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
         }
