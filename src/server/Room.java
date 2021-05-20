@@ -49,4 +49,9 @@ public class Room {
         return clientSocket;
     }
 
+    @Override
+    public String toString() {
+        return "Room{" + "clientSocket=" + clientSocket + ", nomeRoom=" + nomeRoom + ", owner=" + owner + ", RoomID=" + RoomID + ", partecipante=" + partecipante + '}';
+    }
+
 }
