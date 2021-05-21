@@ -27,7 +27,7 @@ public class Gestione {
     private BufferedWriter bw;
     private BufferedReader br;
     private File f;
-    private String entra=null;
+    private String entra = null;
     private String userName = System.getProperty("user.name");
 
     public String salvaUtenti(String nome, String password, String Email) throws IOException {
@@ -94,9 +94,7 @@ public class Gestione {
     }
 
     public void usersStoraging() throws IOException {
-        String codice, nome, password, Email;
         boolean stato;
-
         String[] salva;
         String s;
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\utenti.txt");
@@ -106,13 +104,10 @@ public class Gestione {
             s = br.readLine();
             while (s != null) {
                 salva = s.split(";");
-                nome = salva[0];
-                password = salva[1];
-                Email = salva[2];
-                codice = salva[3];
+
                 stato = Boolean.parseBoolean(salva[4]);
 
-                utente.add(new Utente(nome, password, Email, codice, stato));
+                utente.add(new Utente(salva[0], salva[1], salva[2], salva[3], stato));
                 s = br.readLine();
                 System.out.println("prova2");
             }
