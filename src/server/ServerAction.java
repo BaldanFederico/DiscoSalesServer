@@ -6,6 +6,8 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -21,7 +23,6 @@ import java.util.logging.Logger;
  */
 public class ServerAction implements Runnable {
 
-
     private Socket clientSocket;
 
     public ServerAction(Socket clientSocket) {
@@ -30,7 +31,7 @@ public class ServerAction implements Runnable {
 
     @Override
     public void run() {
-
+        GestioneChatRoom GC = new GestioneChatRoom(clientSocket);
         String nome, password, Email;
         String scrivi;
         Scanner sc = new Scanner(System.in);
@@ -51,14 +52,15 @@ public class ServerAction implements Runnable {
 
             risposta = "";
             scrivi = "";
-
+         
             g.usersStoraging();
+      
             System.out.println("prova1");
             do {
 
                 //riceve dal client 
                 if (g.getEntra() == "enterAccount") {
-                         protocollo="enterAccount";
+                    protocollo = "enterAccount";
                 } else {
 
                     protocollo = ricevi.readLine();
@@ -89,9 +91,8 @@ public class ServerAction implements Runnable {
                         break;
 
                     case "enterAccount":
-                        System.out.println("enterAccount");
-                        GestioneChatRoom profilo = new GestioneChatRoom(clientSocket);
-                        profilo.gestisci();
+                        System.out.println("entra nel case");
+                        GC.gestione();
                         break;
 
                 }
@@ -107,5 +108,5 @@ public class ServerAction implements Runnable {
 
     }
 
+    }
 
-}

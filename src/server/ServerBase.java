@@ -9,7 +9,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
-import static javafx.application.Application.launch;
+
 
 /**
  *
@@ -17,7 +17,7 @@ import static javafx.application.Application.launch;
  */
 public class ServerBase {
 
-    Socket client;
+
 
     /**
      * @param args the command line arguments

@@ -25,35 +25,36 @@ import java.util.logging.Logger;
 public class GestioneChatRoom {
 
     private Socket clientSocket;
-    private Vector<Room> room = new Vector();
+    public Vector<Room> room = new Vector();
     private Genera g = new Genera();
     private File f;
     private String userName = System.getProperty("user.name");
-
+    private int c;
     public GestioneChatRoom(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 
-    public void gestisci() {
-        System.out.println("sei nella gestione account 1");
-        Boolean s = false;
-        String protocollo;
-        String RoomID;
-        String nomeRoom;
-        String owner;
-        String partecipante;
-        String risposta = "";
-        String scrivi = "";
-        Genera g = new Genera();
-        System.out.println("prova1");
+    public void gestione() {
         try {
+
+            System.out.println("sei nella gestione account 1");
+            Boolean s = false;
+            String protocollo;
+            String RoomID;
+            String nomeRoom;
+            String owner;
+            String partecipante;
+            String risposta = "";
+            String scrivi = "";
+            Genera g = new Genera();
+            System.out.println("prova1");
+
             PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
 
             BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
             //andiamo a fare un retrive
-            retriveRoomData();
-             System.out.println("prova56");
+            System.out.println("prova56");
             do {
 
                 protocollo = ricevi.readLine();  //riceve dal client
@@ -82,7 +83,10 @@ public class GestioneChatRoom {
                                     scrittore.println(room.get(i).getOwner());
                                     MandaPartecipante(i);//una volta che l'utente è dentro serve a l'utente sapere tutti i partecipanti di quella room
                                     writeRoom(); //scrivo la room per un eventuale shutdown del server 
+                                } else {
+                                    break;
                                 }
+
                             } else if (i == room.size() - 1 && s == false) {
                                 scrittore.println("Room non trovata");
                             }
@@ -90,13 +94,25 @@ public class GestioneChatRoom {
                         break;
                     case "delt":
                         rimuoviUtente();
-                     break;
+                        break;
                     case "chatData":  //serve per la chat
+                        int lungVet = room.size();
+                        scrittore.println(lungVet);
                         partecipante = ricevi.readLine();//riceve il nome utente
-                        Controlla(partecipante);
+                        retriveRoomData();
+                       
+                     
+                            Controlla(partecipante);
+                           
+                        
                         System.out.println("chatdata");
                         break;
-                    
+                    case "chat":
+                        RoomID = ricevi.readLine();
+                        risposta = ricevi.readLine();//messaggio inviato da un client
+
+                        gestioneMessaggi(RoomID, risposta);
+                        break;
                 }
 
             } while (!protocollo.equals("exit"));
@@ -133,37 +149,37 @@ public class GestioneChatRoom {
         System.out.println(room.size());
         if (room.size() > 0) {//nel caso non possiede room
             for (int i = 0; i < room.size(); i++) {
-
-                if (room.get(i).getPartecipante().equals(partecipante)) {
-                    scrittore.println(room.get(i).getNomeRoom());//manda prima il nome
-                    scrittore.println(room.get(i).getOwner());
                    
-                    MandaPartecipante(i);//poi manda i partecipanti
-
-                } else if (i == room.size() - 1) { //serve room>0 ma l'utente non possiede room 
+                if (room.get(i).getPartecipante().equals(partecipante)) {
+                
+                    scrittore.println(room.get(i).getRoomID());
+                    scrittore.println(room.get(i).getOwner());
+                    scrittore.println(room.get(i).getNomeRoom());
+                    MandaPartecipante(i);
+                } else { //serve room>0 ma l'utente non possiede room 
                     scrittore.println("stop"); //uno per nome room e owner
-                    scrittore.println("stop"); //uno per i partecipanti
+                    //uno per i partecipanti
                 }
 
             }
         } else {
             scrittore.println("stop");
-            scrittore.println("stop");
+           
         }
     }
 
-    private void MandaPartecipante(int c) throws IOException {  //serve per mandare tutti i paretecipanti di quella room al client
+    private void MandaPartecipante(int x) throws IOException {  //serve per mandare tutti i paretecipanti di quella room al client
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
+        BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
         for (int i = 0; i < room.size(); i++) {
-            if (room.get(i).getRoomID().equals(room.get(c).getRoomID())) {
+            if (room.get(i).getRoomID().equals(room.get(x).getRoomID())) {
                 scrittore.println(room.get(i).getPartecipante());
-                   if(room.get(i).getPartecipante().equals(room.get(c).getOwner())){
-                       scrittore.println(room.get(i).getRoomID());
-                   }
+
             }
         }
         scrittore.println("stop");
-        
+
     }
 
     private void rimuoviUtente() throws IOException {
@@ -179,11 +195,11 @@ public class GestioneChatRoom {
 
     }
 
-    private void gestioneMessaggi(String risposta) throws IOException {
+    private void gestioneMessaggi(String RoomID, String risposta) throws IOException {
 
         for (int i = 0; i < room.size(); i++) {
 
-            if (room.get(i).getRoomID().equals(risposta)) {
+            if (room.get(i).getRoomID().equals(RoomID)) {
                 PrintWriter scrittore = new PrintWriter(room.get(i).getClientSocket().getOutputStream(), true);
                 scrittore.println(risposta);
 
@@ -193,9 +209,7 @@ public class GestioneChatRoom {
     }
 
     private void retriveRoomData() throws IOException {
-
         Socket s2;
-
         String[] salva;
         String s;
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\RoomRoute.txt");
@@ -206,16 +220,21 @@ public class GestioneChatRoom {
             while (s != null) {
                 salva = s.split(";");
                 System.out.println("prova3");
-                s2 = new Socket(salva[0], 6666);
+
+                s2 = new Socket(salva[0].substring(1), 6666);
                 System.out.println(s2.getInetAddress());
 
                 room.add(new Room(s2, salva[1], salva[2], salva[3], salva[4]));
                 s = br.readLine();
 
+                System.out.println("eccezione");
+
             }
 
-            System.out.println("prova4");
+            System.out.println("prova10");
             br.close();
         }
+
     }
+
 }
