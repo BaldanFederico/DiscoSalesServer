@@ -30,6 +30,7 @@ public class GestioneChatRoom {
     private File f;
     private String userName = System.getProperty("user.name");
     private int c;
+
     public GestioneChatRoom(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
@@ -96,21 +97,14 @@ public class GestioneChatRoom {
                         rimuoviUtente();
                         break;
                     case "chatData":  //serve per la chat
-                        int lungVet = room.size();
-                        scrittore.println(lungVet);
                         partecipante = ricevi.readLine();//riceve il nome utente
                         retriveRoomData();
-                       
-                     
-                            Controlla(partecipante);
-                           
-                        
+                        Controlla(partecipante);
                         System.out.println("chatdata");
                         break;
                     case "chat":
                         RoomID = ricevi.readLine();
                         risposta = ricevi.readLine();//messaggio inviato da un client
-
                         gestioneMessaggi(RoomID, risposta);
                         break;
                 }
@@ -146,25 +140,34 @@ public class GestioneChatRoom {
 
     private void Controlla(String partecipante) throws IOException { //serve quando in cliant accede al suo account con già dei progressi fatti 
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
-        System.out.println(room.size());
+        // System.out.println(room.size());
+        System.out.println("passa");
         if (room.size() > 0) {//nel caso non possiede room
             for (int i = 0; i < room.size(); i++) {
-                   
+                System.out.println("1234");
                 if (room.get(i).getPartecipante().equals(partecipante)) {
-                
+                    System.out.println(room.get(i).getPartecipante());
                     scrittore.println(room.get(i).getRoomID());
                     scrittore.println(room.get(i).getOwner());
                     scrittore.println(room.get(i).getNomeRoom());
+                    System.out.println("gbdhjusbvg");
                     MandaPartecipante(i);
-                } else { //serve room>0 ma l'utente non possiede room 
-                    scrittore.println("stop"); //uno per nome room e owner
+                    if(room.size() == 1){
+                       scrittore.println("stop");
+                    }
+                } else if (i == room.size() - 1) { //serve room>0 ma l'utente non possiede room 
+                    System.out.println("stop");
+                    scrittore.println("stop");
+                    scrittore.println("stop");
+                           
+                    //uno per nome room e owner
                     //uno per i partecipanti
                 }
 
             }
         } else {
             scrittore.println("stop");
-           
+
         }
     }
 
@@ -213,9 +216,8 @@ public class GestioneChatRoom {
         String[] salva;
         String s;
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\RoomRoute.txt");
-        BufferedReader br = new BufferedReader(new FileReader(f));
         if (f.exists()) {
-
+            BufferedReader br = new BufferedReader(new FileReader(f));
             s = br.readLine();
             while (s != null) {
                 salva = s.split(";");
@@ -230,7 +232,6 @@ public class GestioneChatRoom {
                 System.out.println("eccezione");
 
             }
-
             System.out.println("prova10");
             br.close();
         }
