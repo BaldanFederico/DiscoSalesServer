@@ -29,7 +29,7 @@ public class GestioneChatRoom {
     private Genera g = new Genera();
     private File f;
     private String userName = System.getProperty("user.name");
-    private int c;
+    private String messaggio;
 
     public GestioneChatRoom(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -57,6 +57,8 @@ public class GestioneChatRoom {
             //andiamo a fare un retrive
             System.out.println("prova56");
             do {
+
+             //   scrittore.println("stop");
 
                 protocollo = ricevi.readLine();  //riceve dal client
                 System.out.println(protocollo);
@@ -103,12 +105,13 @@ public class GestioneChatRoom {
                         retriveRoomData();
                         Controlla(partecipante);
                         System.out.println("chatdata");
+
                         break;
+
                     case "chat":
-                        RoomID = ricevi.readLine();
-                        risposta = ricevi.readLine();//messaggio inviato da un client
-                        partecipante = ricevi.readLine();
-                        gestioneMessaggi(RoomID, risposta, partecipante);
+
+                        gestioneMessaggi();
+
                         break;
                 }
 
@@ -155,6 +158,8 @@ public class GestioneChatRoom {
                     scrittore.println(room.get(i).getNomeRoom());
                     MandaPartecipante(i);
 
+                } else if (i == room.size() - 1) {
+                    scrittore.println("stop");
                 }
             }
 
@@ -162,7 +167,7 @@ public class GestioneChatRoom {
             scrittore.println("stop");
         }
         scrittore.println("stop");
-          
+
     }
 
     private void MandaPartecipante(int x) throws IOException {  //serve per mandare tutti i paretecipanti di quella room al client
@@ -192,13 +197,18 @@ public class GestioneChatRoom {
 
     }
 
-    private void gestioneMessaggi(String RoomID, String risposta, String partecipante) throws IOException {
+    private void gestioneMessaggi() throws IOException {
+        BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+        String RoomID = ricevi.readLine();
+        messaggio = ricevi.readLine();//messaggio inviato da un client
+        String partecipante = ricevi.readLine();
         for (int i = 0; i < room.size(); i++) {
 
-            if (room.get(i).getRoomID().equals(RoomID) && !room.get(i).getPartecipante().equals(partecipante)) {
+            if (room.get(i).getRoomID().equals(RoomID)) {
                 PrintWriter scrittore = new PrintWriter(room.get(i).getClientSocket().getOutputStream(), true);
-                scrittore.println(risposta);
+
+                scrittore.println("[" + partecipante + "]: " + messaggio);
 
             }
         }
