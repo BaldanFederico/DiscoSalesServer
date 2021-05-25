@@ -94,9 +94,9 @@ public class GestioneChatRoom {
                         }
                         break;
                     case "delt":
-                        partecipante=ricevi.readLine();
-                        RoomID=ricevi.readLine();
-                        rimuoviUtente(partecipante,RoomID);
+                        partecipante = ricevi.readLine();
+                        RoomID = ricevi.readLine();
+                        rimuoviUtente(partecipante, RoomID);
                         break;
                     case "chatData":  //serve per la chat
                         partecipante = ricevi.readLine();//riceve il nome utente
@@ -107,8 +107,8 @@ public class GestioneChatRoom {
                     case "chat":
                         RoomID = ricevi.readLine();
                         risposta = ricevi.readLine();//messaggio inviato da un client
-
-                        gestioneMessaggi(RoomID, risposta);
+                        partecipante = ricevi.readLine();
+                        gestioneMessaggi(RoomID, risposta, partecipante);
                         break;
                 }
 
@@ -162,7 +162,7 @@ public class GestioneChatRoom {
             scrittore.println("stop");
         }
         scrittore.println("stop");
-
+          
     }
 
     private void MandaPartecipante(int x) throws IOException {  //serve per mandare tutti i paretecipanti di quella room al client
@@ -192,11 +192,11 @@ public class GestioneChatRoom {
 
     }
 
-    private void gestioneMessaggi(String RoomID, String risposta) throws IOException {
+    private void gestioneMessaggi(String RoomID, String risposta, String partecipante) throws IOException {
 
         for (int i = 0; i < room.size(); i++) {
 
-            if (room.get(i).getRoomID().equals(RoomID)) {
+            if (room.get(i).getRoomID().equals(RoomID) && !room.get(i).getPartecipante().equals(partecipante)) {
                 PrintWriter scrittore = new PrintWriter(room.get(i).getClientSocket().getOutputStream(), true);
                 scrittore.println(risposta);
 
@@ -233,6 +233,5 @@ public class GestioneChatRoom {
         }
 
     }
-
 
 }
