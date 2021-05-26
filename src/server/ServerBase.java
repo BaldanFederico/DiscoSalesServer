@@ -16,14 +16,14 @@ import java.util.logging.*;
  * @author pogliani.mattia
  */
 public class ServerBase {
-
-
+public static ArrayList<Socket> socket2 = new ArrayList();
+  
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ArrayList<ServerAction> socket = new ArrayList();
+   ArrayList<ServerAction> socket = new ArrayList();
 
         try {
             ServerSocket server = new ServerSocket(6666);  //stabilisce la porta
@@ -33,6 +33,7 @@ public class ServerBase {
                 Socket client = server.accept();
                 System.out.println("connessione ricevuta, ora se la smazza il thread");
                 Thread Serverino = new Thread(new ServerAction(client));
+                socket2.add(client);
                 socket.add(new ServerAction(client));
                 Serverino.start();
             }
@@ -41,5 +42,11 @@ public class ServerBase {
             Logger.getLogger(ServerAction.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public  ArrayList<Socket> getSocket2() {
+        return socket2;
+    }
+
+  
 
 }

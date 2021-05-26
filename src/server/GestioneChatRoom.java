@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,8 +59,7 @@ public class GestioneChatRoom {
             System.out.println("prova56");
             do {
 
-             //   scrittore.println("stop");
-
+                //   scrittore.println("stop");
                 protocollo = ricevi.readLine();  //riceve dal client
                 System.out.println(protocollo);
                 switch (protocollo) {
@@ -200,17 +200,25 @@ public class GestioneChatRoom {
     private void gestioneMessaggi() throws IOException {
         BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+        ServerBase sb = new ServerBase();
+        ArrayList<Socket> cliente = sb.getSocket2();//riceve il collegamento di tutte le socket dal metodo serverBase 
+        System.out.println(cliente.size());
         String RoomID = ricevi.readLine();
         messaggio = ricevi.readLine();//messaggio inviato da un client
         String partecipante = ricevi.readLine();
         for (int i = 0; i < room.size(); i++) {
 
             if (room.get(i).getRoomID().equals(RoomID)) {
-                PrintWriter scrittore = new PrintWriter(room.get(i).getClientSocket().getOutputStream(), true);
 
-                scrittore.println("[" + partecipante + "]: " + messaggio);
+                for (int x = 0; x < cliente.size(); x++) {
+                    if (cliente.get(x).getInetAddress().equals(room.get(i).getClientSocket().getInetAddress())) {
+                        PrintWriter scrittore = new PrintWriter(cliente.get(i).getOutputStream(), true);
+                        scrittore.println("[" + partecipante + "]: " + messaggio);
+                    }
+                }
 
             }
+
         }
 
     }
