@@ -13,7 +13,6 @@ import java.util.*;
  * @author dell
  */
 public class Room {
-
     private Socket clientSocket;
     private String nomeRoom;
     private String owner;//un id univoco per ogni utente

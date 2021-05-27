@@ -5,8 +5,6 @@
  */
 package server;
 
-import java.util.Scanner;
-
 /**
  *
  * @author agostinelli.luca

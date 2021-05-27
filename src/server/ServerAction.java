@@ -22,7 +22,6 @@ import java.util.logging.Logger;
  * @author dell
  */
 public class ServerAction implements Runnable {
-
     private Socket clientSocket;
 
     public ServerAction(Socket clientSocket) {
@@ -32,7 +31,7 @@ public class ServerAction implements Runnable {
     @Override
     public void run() {
         GestioneChatRoom GC = new GestioneChatRoom(clientSocket);
-        String nome, password, Email;
+        String nome, password, email;
         String scrivi;
         Scanner sc = new Scanner(System.in);
         String protocollo = null;
@@ -72,8 +71,8 @@ public class ServerAction implements Runnable {
                         g.CreateFolder();
                         nome = ricevi.readLine();
                         password = ricevi.readLine();
-                        Email = ricevi.readLine();
-                        risposta = g.salvaUtenti(nome, password, Email); //salva tutto nell'oggetto
+                        email = ricevi.readLine();
+                        risposta = g.salvaUtenti(nome, password, email); //salva tutto nell'oggetto
                         scrittore.println(risposta);
                         g2.mandaMail();  //bisogna aggiungere la parte dell'invio
 

@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class Gestione {
 
-    ArrayList<Utente> utente = new ArrayList();
+    ArrayList<Utente> utenti = new ArrayList();
     private Genera g = new Genera();
     private BufferedWriter bw;
     private BufferedReader br;
@@ -32,13 +32,13 @@ public class Gestione {
 
     public String salvaUtenti(String nome, String password, String Email) throws IOException {
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\utenti.txt");
-        for (int i = 0; i < utente.size(); i++) {
-            if (utente.get(i).getNome().equals(nome)) {
+        for (int i = 0; i < utenti.size(); i++) {
+            if (utenti.get(i).getNome().equals(nome)) {
                 return "il nome esiste già";
             }
 
         }
-        utente.add(new Utente(nome, password, Email, g.codice(), false));
+        utenti.add(new Utente(nome, password, Email, g.codice(), false));
         f.createNewFile();
         scrivi(f);
         return "registrazione avvenuta con successo";
@@ -47,9 +47,9 @@ public class Gestione {
     public String autenticazione(String nome, String password) throws IOException {
         System.out.println("dentro il metodo");
 
-        for (int i = 0; i < utente.size(); i++) {
-            if (utente.get(i).getNome().equals(nome) && utente.get(i).getPassword().equals(password)) {
-                if (utente.get(i).getStato() == false) {
+        for (int i = 0; i < utenti.size(); i++) {
+            if (utenti.get(i).getNome().equals(nome) && utenti.get(i).getPassword().equals(password)) {
+                if (utenti.get(i).getStato() == false) {
 
                     return "questo account non è stato ancora attivato, andare sulla sezione attiva account per l'attivazione";
 
@@ -70,20 +70,20 @@ public class Gestione {
     public String verificaAccount(String codice) throws IOException {
         boolean stato;
         bw = new BufferedWriter(new FileWriter(f, true));
-        for (int x = 0; x < utente.size(); x++) {
+        for (int x = 0; x < utenti.size(); x++) {
 
-            if (utente.get(x).getCodice().equals(codice)) {
-                if (utente.get(x).getStato() == true) {
+            if (utenti.get(x).getCodice().equals(codice)) {
+                if (utenti.get(x).getStato() == true) {
                     System.out.println("conto già attivato");
 
                 } else {
                     stato = true;
-                    utente.get(x).setStato(stato);
+                    utenti.get(x).setStato(stato);
                     scrivi(f);
                     return "conto attivato";
 
                 }
-            } else if (x == utente.size() - 1) {
+            } else if (x == utenti.size() - 1) {
                 return "codice non valido";
 
             }
@@ -107,7 +107,7 @@ public class Gestione {
 
                 stato = Boolean.parseBoolean(salva[4]);
 
-                utente.add(new Utente(salva[0], salva[1], salva[2], salva[3], stato));
+                utenti.add(new Utente(salva[0], salva[1], salva[2], salva[3], stato));
                 s = br.readLine();
                 System.out.println("prova2");
             }
@@ -129,12 +129,12 @@ public class Gestione {
 
     private void scrivi(File f) throws IOException {
         bw = new BufferedWriter(new FileWriter(f));
-        for (int i = 0; i < utente.size(); i++) {
-            bw.write(utente.get(i).getNome() + ";");
-            bw.write(utente.get(i).getPassword() + ";");
-            bw.write(utente.get(i).getEmail() + ";");
-            bw.write(utente.get(i).getCodice() + ";");
-            bw.write(utente.get(i).getStato() + ";");
+        for (int i = 0; i < utenti.size(); i++) {
+            bw.write(utenti.get(i).getNome() + ";");
+            bw.write(utenti.get(i).getPassword() + ";");
+            bw.write(utenti.get(i).getEmail() + ";");
+            bw.write(utenti.get(i).getCodice() + ";");
+            bw.write(utenti.get(i).getStato() + ";");
             bw.newLine();
             bw.flush();
 

@@ -24,7 +24,6 @@ import java.util.logging.Logger;
  * @author dell
  */
 public class GestioneChatRoom {
-
     private Socket clientSocket;
     public Vector<Room> room = new Vector();
     private Genera g = new Genera();
@@ -67,7 +66,7 @@ public class GestioneChatRoom {
                         owner = ricevi.readLine();
                         partecipante = ricevi.readLine();
                         nomeRoom = ricevi.readLine();
-                        room.add(new Room(clientSocket, nomeRoom, owner, g.GetRoomID(), partecipante));  //vuole la server socket appartenente nome proprietario con il nome utente
+                        room.add(new Room(clientSocket, nomeRoom, owner, g.getRoomID(), partecipante));  //vuole la server socket appartenente nome proprietario con il nome utente
                         scrittore.println(room.lastElement().getRoomID());//solo il proprietario può sapere l'id
                         writeRoom();//salvo i dati della room all'interno di un file
                         break;
@@ -84,7 +83,7 @@ public class GestioneChatRoom {
                                     room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));//aggiunge un partecipante 
                                     scrittore.println(room.get(i).getNomeRoom());
                                     scrittore.println(room.get(i).getOwner());
-                                    MandaPartecipante(i);//una volta che l'utente è dentro serve a l'utente sapere tutti i partecipanti di quella room
+                                    mandaPartecipante(i);//una volta che l'utente è dentro serve a l'utente sapere tutti i partecipanti di quella room
                                     writeRoom(); //scrivo la room per un eventuale shutdown del server 
                                 } else {
                                     break;
@@ -103,7 +102,7 @@ public class GestioneChatRoom {
                     case "chatData":  //serve per la chat
                         partecipante = ricevi.readLine();//riceve il nome utente
                         retriveRoomData();
-                        Controlla(partecipante);
+                        controlla(partecipante);
                         System.out.println("chatdata");
                         break;
                     case "chat":
@@ -150,7 +149,7 @@ public class GestioneChatRoom {
         bw.close();
     }
 
-    private void Controlla(String partecipante) throws IOException { //serve quando in cliant accede al suo account con già dei progressi fatti 
+    private void controlla(String partecipante) throws IOException { //serve quando in cliant accede al suo account con già dei progressi fatti 
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
         // System.out.println(room.size());
         System.out.println("passa");
@@ -162,7 +161,7 @@ public class GestioneChatRoom {
                     scrittore.println(room.get(i).getRoomID());
                     scrittore.println(room.get(i).getOwner());
                     scrittore.println(room.get(i).getNomeRoom());
-                    MandaPartecipante(i);
+                    mandaPartecipante(i);
 
                 } else if (i == room.size() - 1) {
                     scrittore.println("stop");
@@ -176,7 +175,7 @@ public class GestioneChatRoom {
 
     }
 
-    private void MandaPartecipante(int x) throws IOException {  //serve per mandare tutti i paretecipanti di quella room al client
+    private void mandaPartecipante(int x) throws IOException {  //serve per mandare tutti i paretecipanti di quella room al client
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
         BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
