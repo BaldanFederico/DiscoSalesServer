@@ -21,7 +21,7 @@ public class Genera {
     public String codice() {
         Random r = new Random();
         String randomString = "";
-        int length = 10;
+        int length = 5;
         char[] text = new char[length];
 
         for (int x = 0; x < text.length; x++) {

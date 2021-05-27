@@ -105,14 +105,20 @@ public class GestioneChatRoom {
                         retriveRoomData();
                         Controlla(partecipante);
                         System.out.println("chatdata");
-
                         break;
-
                     case "chat":
-
                         gestioneMessaggi();
-
                         break;
+                    case "remove":
+                        partecipante = ricevi.readLine();
+                        for (int i = 0; i < room.size(); i++) {
+                            if (room.get(i).getPartecipante().equals(partecipante)) {
+                                room.remove(i);
+                                writeRoom();
+                            }
+                        }
+                        break;
+
                 }
 
             } while (!protocollo.equals("exit"));
@@ -151,7 +157,7 @@ public class GestioneChatRoom {
         if (room.size() > 0) {//nel caso non possiede room
             for (int i = 0; i < room.size(); i++) {
 
-                if (room.get(i).getPartecipante().equals(partecipante) || room.size()==2) {
+                if (room.get(i).getPartecipante().equals(partecipante) || room.size() == 2) {
 
                     scrittore.println(room.get(i).getRoomID());
                     scrittore.println(room.get(i).getOwner());
@@ -160,8 +166,8 @@ public class GestioneChatRoom {
 
                 } else if (i == room.size() - 1) {
                     scrittore.println("stop");
-               
-            }
+
+                }
             }
         } else {
             scrittore.println("stop");
