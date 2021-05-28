@@ -11,10 +11,9 @@ package server;
  * @author parrarodriguez.manue
  */
 public class Utente {
-
     private String nome;
     private String password;
-    private String Email;
+    private String email;
     private String codice;
     private boolean stato;
 
@@ -23,7 +22,7 @@ public class Utente {
     public Utente(String nome, String password, String Email, String codice, boolean stato) {
         this.nome = nome;
         this.password = password;
-        this.Email = Email;
+        this.email = Email;
         this.codice = codice;
         this.stato = stato;
     }
@@ -62,10 +61,10 @@ public class Utente {
 
     public String getEmail() {
 
-        return Email;
+        return email;
     }
 
     public void setEmail(String Email) {
-        this.Email = Email;
+        this.email = Email;
     }
 }
