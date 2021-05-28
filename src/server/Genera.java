@@ -9,6 +9,11 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.Properties;
 import java.util.Random;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  *
@@ -18,7 +23,7 @@ public class Genera {
 
     private String caratteri = "ABCDEFGHILMNOPQRSTUVZWYKabcdefghilmnopqrstuvzkxwy0123456789";
 
-    public String codice() {
+    public String codiceRoom() {
         Random r = new Random();
         String randomString = "";
         int length = 5;
@@ -32,11 +37,11 @@ public class Genera {
 
     }
 
-    public String getRoomID() {  //serve per comunicare con gli altri utenti all'interno di una room
+    public String GetcodiceU() {  //serve per comunicare con gli altri utenti all'interno di una room
 
         Random r = new Random();
         String randomString = "";
-        int length = 10;
+        int length = 7;
         char[] text = new char[length];
 
         for (int x = 0; x < text.length; x++) {
@@ -51,33 +56,31 @@ public class Genera {
 
     
     
-    public void mandaMail() {
+    public void mandaMail(String codice,String Email) {
+       
+        String smtpHost = "smtp.google.com";
+        String indirizzoDa = "discosales@security.com";
+      
 
-//
-//   final String fromEmail = "myemailid@gmail.com"; //requires valid gmail id
-//		final String password = "mypassword"; // correct password for gmail id
-//		final String toEmail ="myemail@yahoo.com"; // can be any email id 
-//		
-//		System.out.println("TLSEmail Start");
-//		Properties props = new Properties();
-//		props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
-//		props.put("mail.smtp.port", "587"); //TLS Port
-//		props.put("mail.smtp.auth", "true"); //enable authentication
-//		props.put("mail.smtp.starttls.enable", "true"); //enable STARTTLS
-//		
-//                //create Authenticator object to pass in Session.getInstance argument
-//		Authenticator auth = new Authenticator() {
-//			//override the getPasswordAuthentication method
-//			protected PasswordAuthentication getPasswordAuthentication() {
-//				return new PasswordAuthentication(fromEmail, password.toCharArray());
-//			}
-//		};
-//		Session session = Session.getInstance(props, auth);
-//		
-//		EmailUtil.sendEmail(session, toEmail,"TLSEmail Testing Subject", "TLSEmail Testing Body");
-//		
-//	}
-//	
-//    }
+        try {
+            Properties props = System.getProperties();
+
+            props.put("mail.smtp.host", smtpHost);
+
+            Session session = Session.getDefaultInstance(props, null);
+
+            MimeMessage message = new MimeMessage(session);
+
+            message.setFrom(new InternetAddress(indirizzoDa));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(Email));
+
+            message.setSubject("codice di attivazione");
+            message.setText(codice);
+
+            Transport.send(message);
+
+        } catch (Exception e) {
+            System.out.println("la mail non funziona");
+        }
     }
 }
