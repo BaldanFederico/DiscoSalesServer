@@ -20,22 +20,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author dell
+ * La classe gestisce i dati delle chatroom registrate nel server e comunica con il client in caso il proprietario vuole modificare i suoi parametri
+ * @author DiscoSales
  */
 public class GestioneChatRoom {
-  
     private Socket clientSocket;
     public Vector<Room> room = new Vector();
     private Genera g = new Genera();
     private File f;
     private String userName = System.getProperty("user.name");
     private String messaggio;
-
+/**
+ * Costruttore 
+ * @param clientSocket Il socket che comunica con il client
+ */
     public GestioneChatRoom(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
-
+/**
+ * Il metodo gestisce le comunicazioni con il client
+ */
     public void gestione() {
         try {
 
@@ -55,37 +59,37 @@ public class GestioneChatRoom {
 
             BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            //andiamo a fare un retrive
+            // Retrive
             System.out.println("prova56");
             do {
 
                 //   scrittore.println("stop");
-                protocollo = ricevi.readLine();  //riceve dal client
+                protocollo = ricevi.readLine();  //Riceve dal client
                 System.out.println(protocollo);
                 switch (protocollo) {
-                    case "create":          //crea una nuova room
+                    case "create":          //Crea una nuova room
                         owner = ricevi.readLine();
                         partecipante = ricevi.readLine();
                         nomeRoom = ricevi.readLine();
-                        room.add(new Room(clientSocket, nomeRoom, owner, g.codiceRoom(), partecipante));  //vuole la server socket appartenente nome proprietario con il nome utente
-                        scrittore.println(room.lastElement().getRoomID());//solo il proprietario può sapere l'id
-                        writeRoom();//salvo i dati della room all'interno di un file
+                        room.add(new Room(clientSocket, nomeRoom, owner, g.codiceRoom(), partecipante));  //Vuole la server socket appartenente nome proprietario con il nome utente
+                        scrittore.println(room.lastElement().getRoomID());//Solo il proprietario può sapere l'id
+                        writeRoom();//Salvo i dati della room all'interno di un file
                         break;
-                    case "search":  //cerca la room
+                    case "search":  //Cerca la room
                         RoomID = ricevi.readLine();
                         for (int i = 0; i < room.size(); i++) {
 
                             if (room.get(i).getRoomID().equals(RoomID)) {
                                 s = true;
-                                scrittore.println(room.get(i).getNomeRoom());                             //se l'utente si vuole unire entra dentro
+                                scrittore.println(room.get(i).getNomeRoom());                             //Se l'utente si vuole unire entra dentro
                                 risposta = ricevi.readLine();
-                                if (risposta.equals("entr")) { //la stringa che il client gli invia prmendo un bottone
+                                if (risposta.equals("entr")) { //La stringa che il client gli invia prmendo un bottone
                                     partecipante = ricevi.readLine();//
-                                    room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));//aggiunge un partecipante 
+                                    room.add(new Room(clientSocket, room.get(i).getNomeRoom(), room.get(i).getOwner(), room.get(i).getRoomID(), partecipante));//Aggiunge un partecipante 
                                     scrittore.println(room.get(i).getNomeRoom());
                                     scrittore.println(room.get(i).getOwner());
-                                    MandaPartecipante(i);//una volta che l'utente è dentro serve a l'utente sapere tutti i partecipanti di quella room
-                                    writeRoom(); //scrivo la room per un eventuale shutdown del server 
+                                    MandaPartecipante(i);//Una volta che l'utente è dentro serve a l'utente sapere tutti i partecipanti di quella room
+                                    writeRoom(); //Scrivo la room per un eventuale shutdown del server 
                                 } else {
                                     break;
                                 }
@@ -100,8 +104,8 @@ public class GestioneChatRoom {
                         RoomID = ricevi.readLine();
                         rimuoviUtente(partecipante, RoomID);
                         break;
-                    case "chatData":  //serve per la chat
-                        partecipante = ricevi.readLine();//riceve il nome utente
+                    case "chatData":  //Serve per la chat
+                        partecipante = ricevi.readLine();//Riceve il nome utente
                         retriveRoomData();
                         Controlla(partecipante);
                         System.out.println("chatdata");
@@ -123,7 +127,7 @@ public class GestioneChatRoom {
 
             } while (!protocollo.equals("exit"));
 
-            //aspetta il messaggio del client
+            //Aspetta il messaggio del client
             ricevi.close();
             scrittore.close();
             clientSocket.close();
@@ -131,8 +135,11 @@ public class GestioneChatRoom {
 
         }
     }
-
-    private void writeRoom() throws IOException {  //serve tenere traccia dei vari delle room
+/**
+ * Il metodo scrive sul file della chatroom modificando i parametri
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
+    private void writeRoom() throws IOException {  //Serve tenere traccia dei vari delle room
 
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer\\RoomRoute.txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
@@ -149,12 +156,16 @@ public class GestioneChatRoom {
         }
         bw.close();
     }
-
-    private void Controlla(String partecipante) throws IOException { //serve quando in cliant accede al suo account con già dei progressi fatti 
+/**
+ * Il metodo scrive quando in client accede al suo account con già dei progressi fatti 
+ * @param partecipante Nome del client
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
+    private void Controlla(String partecipante) throws IOException {
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
         // System.out.println(room.size());
         System.out.println("passa");
-        if (room.size() > 0) {//nel caso non possiede room
+        if (room.size() > 0) {//Nel caso non possiede room
             for (int i = 0; i < room.size(); i++) {
 
                 if (room.get(i).getPartecipante().equals(partecipante)) {
@@ -175,8 +186,12 @@ public class GestioneChatRoom {
         scrittore.println("stop");
 
     }
-
-    private void MandaPartecipante(int x) throws IOException {  //serve per mandare tutti i paretecipanti di quella room al client
+/**
+ * Il metodo manda le chat ai membri appartenenti al gruppo quando sono attivi
+ * @param x Indice dell'utente comunicante con il server
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
+    private void MandaPartecipante(int x) throws IOException {  //Serve per mandare tutti i paretecipanti di quella room al client
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
         BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
@@ -190,7 +205,12 @@ public class GestioneChatRoom {
         scrittore.println("stop");
 
     }
-
+/**
+ * Il metodo rimuove un utente inserendo l'username e il codice della room appartenente
+ * @param partecipante Username Utente
+ * @param RoomID ID della room
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
     private void rimuoviUtente(String partecipante, String RoomID) throws IOException {
         PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
 
@@ -202,15 +222,18 @@ public class GestioneChatRoom {
         }
 
     }
-
+/**
+ * Il metodo gestisce i messaggi nella chatroom
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
     private void gestioneMessaggi() throws IOException {
         BufferedReader ricevi = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         ServerBase sb = new ServerBase();
-        ArrayList<Socket> cliente = sb.getSocket2();//riceve il collegamento di tutte le socket dal metodo serverBase 
+        ArrayList<Socket> cliente = sb.getSocket2();// Riceve il collegamento di tutte le socket dal metodo serverBase 
         System.out.println(cliente.size());
         String RoomID = ricevi.readLine();
-        messaggio = ricevi.readLine();//messaggio inviato da un client
+        messaggio = ricevi.readLine();//Messaggio inviato da un client
         String partecipante = ricevi.readLine();
         for (int i = 0; i < room.size(); i++) {
             if (room.get(i).getRoomID().equals(RoomID)) {
@@ -231,7 +254,10 @@ public class GestioneChatRoom {
         }
 
     }
-
+/**
+ * Il metodo legge dal file i dati della chatroom e li salva nell'arraylist
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
     private void retriveRoomData() throws IOException {
         Socket s2;
         String[] salva;

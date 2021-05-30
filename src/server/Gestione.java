@@ -17,8 +17,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- *
- * @author dell
+ *La classe gestisce gli utenti e le chatroom registrate nel server
+ * @author DiscoSales
  */
 public class Gestione {
   ArrayList<Utente> utente = new ArrayList();
@@ -28,7 +28,14 @@ public class Gestione {
     private File f;
     private String entra = null;
     private String userName = System.getProperty("user.name");
-    
+    /**
+     * Il metodo salva i dati degli utenti 
+     * @param nome Nome dell'utente
+     * @param password Pw dell'utente
+     * @param Email Mail dell'utente
+     * @return Avvisa che la registrazione è avvenuta con successo
+     * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+     */
     public String salvaUtenti(String nome, String password, String Email) throws IOException {
         String codice;
         codice=g.GetcodiceU();
@@ -45,7 +52,13 @@ public class Gestione {
         g.mandaMail(codice,Email);
         return "registrazione avvenuta con successo";
     }
-
+/**
+ * Il metodo verifica se i dati sono corretti e appartengono a quel utente specifico
+ * @param nome Nome dell'utente
+ * @param password Pw dell'utente
+ * @return Se l'accesso è stato eseguito correttamente oppure no
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
     public String autenticazione(String nome, String password) throws IOException {
         System.out.println("dentro il metodo");
 
@@ -57,7 +70,7 @@ public class Gestione {
 
                 } else {
                     setEntra("enterAccount");
-//                invio di un protocollo che permette di cambiare scena al cliente
+//                Invio di un protocollo che permette di cambiare scena al cliente
                     return "enterAccount";//protocollo permette di cambiare la scena del client
 
                 }
@@ -68,7 +81,12 @@ public class Gestione {
 
         return "credenziali sbagliate";
     }
-
+/**
+ * Il metodo verifica che il codice di attivazione sia corretto
+ * @param codice Codice di attivazione
+ * @return Risultato della verifica
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
     public String verificaAccount(String codice) throws IOException {
         boolean stato;
         bw = new BufferedWriter(new FileWriter(f, true));
@@ -94,7 +112,10 @@ public class Gestione {
 
         return "nessun utente ancora registrato";
     }
-
+/**
+ * Il metodo salva i dati dell'utente in un apposito file
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
     public void usersStoraging() throws IOException {
         boolean stato;
         String[] salva;
@@ -119,7 +140,9 @@ public class Gestione {
         }
 
     }
-
+/**
+ * Il metodo crea la cartella in cui il file è contenuto
+ */
     public void CreateFolder() {
         f = new File("C:\\Users\\" + userName + "\\Desktop\\DiscosalesServer");
 
@@ -128,7 +151,11 @@ public class Gestione {
         }
 
     }
-
+/**
+ * Il metodo scrive sul file dell'utente
+ * @param f File 
+ * @throws IOException Eccezione che viene gestita tramite ,appunto, il "throws IOException"
+ */
     private void scrivi(File f) throws IOException {
         bw = new BufferedWriter(new FileWriter(f));
         
@@ -156,5 +183,5 @@ public class Gestione {
         return entra;
     }
 
-    //metodo che legge nel file contenente gli id degli utenti con le rispettive room appartenenti
+    //Metodo che legge nel file contenente gli ID degli utenti con le rispettive room appartenenti
 }

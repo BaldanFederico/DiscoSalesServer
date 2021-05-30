@@ -6,9 +6,8 @@
 package server;
 
 /**
- *
- * @author agostinelli.luca
- * @author parrarodriguez.manue
+ * La classe gestisce i dati dell'utente 
+ * @author DiscoSales
  */
 public class Utente {
     private String nome;
@@ -17,8 +16,14 @@ public class Utente {
     private String codice;
     private boolean stato;
 
-  
-
+/**
+ * Costruttore che instanzia l'utente
+ * @param nome Nome utente
+ * @param password Pw utente
+ * @param Email Mail utente
+ * @param codice Codice
+ * @param stato Stato dell'utente
+ */
     public Utente(String nome, String password, String Email, String codice, boolean stato) {
         this.nome = nome;
         this.password = password;
@@ -38,8 +43,6 @@ public class Utente {
     public void setStato(boolean stato) {
         this.stato = stato;
     }
-
-    
 
     public String getNome() {
 

@@ -12,20 +12,21 @@ import java.util.logging.*;
 
 
 /**
- *
- * @author pogliani.mattia
+ * La classe gestisce le socket che si connettono ai client e la loro gestione viene delagata al "server action"
+ * @author DiscoSales
  */
 public class ServerBase {
     private static ArrayList<Socket> sockets = new ArrayList();
     private static ArrayList<ServerAction> clients = new ArrayList();
     
-    /**
-     * @param args the command line arguments
+    /** 
+     * Il main delega la gestione delle socket al "server action"
+     * @param args Gli argomenti delle linee di comando
      */
     public static void main(String[] args) {
 
         try {
-            ServerSocket server = new ServerSocket(6666);  //stabilisce la porta
+            ServerSocket server = new ServerSocket(6666);  //Stabilisce la porta
             System.out.println("DSServer here ...");
             while (true) {
                 Socket client = server.accept();

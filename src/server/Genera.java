@@ -16,13 +16,16 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 /**
- *
- * @author dell
+ * La classe "Genera" gestisce la creazione di codici per le chatroom e i codici di attivazione
+ * @author DiscoSales
  */
 public class Genera {
 
     private String caratteri = "ABCDEFGHILMNOPQRSTUVZWYKabcdefghilmnopqrstuvzkxwy0123456789";
-
+/**
+ * Il metodo restituisce il codice della room creata
+ * @return randomString Restituisce il codice della stanza
+ */
     public String codiceRoom() {
         Random r = new Random();
         String randomString = "";
@@ -36,8 +39,11 @@ public class Genera {
         return randomString;
 
     }
-
-    public String GetcodiceU() {  //serve per comunicare con gli altri utenti all'interno di una room
+/** 
+ * Serve per comunicare con gli altri utenti all'interno di una room
+ * @return randomString Restituisce il codice di attivazione
+ */
+    public String GetcodiceU() {  //Serve per comunicare con gli altri utenti all'interno di una room
 
         Random r = new Random();
         String randomString = "";
@@ -52,9 +58,11 @@ public class Genera {
 
     }
 
-
-
-    
+/**
+ * Il metodo manda il codice di accesso tramite la mail
+ * @param codice codice attivazione
+ * @param Email mail 
+ */
     
     public void mandaMail(String codice,String Email) {
        

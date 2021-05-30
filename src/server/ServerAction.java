@@ -18,8 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author dell
+ * La classe gestisce le interazioni con i client connessi e guida i client al loro accesso nel server
+ * @author DiscoSales
  */
 public class ServerAction implements Runnable {
  private Socket clientSocket;
@@ -27,7 +27,9 @@ public class ServerAction implements Runnable {
     public ServerAction(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
-
+/**
+ * Il metodo gestisce le stringhe inviate dai client 
+ */
     @Override
     public void run() {
         GestioneChatRoom GC = new GestioneChatRoom(clientSocket);
@@ -57,7 +59,7 @@ public class ServerAction implements Runnable {
             System.out.println("prova1");
             do {
 
-                //riceve dal client 
+                //Riceve dal client 
                 if (g.getEntra() == "enterAccount") {
                     protocollo = "enterAccount";
                 } else {
@@ -72,7 +74,7 @@ public class ServerAction implements Runnable {
                         nome = ricevi.readLine();
                         password = ricevi.readLine();
                         Email = ricevi.readLine();
-                        risposta = g.salvaUtenti(nome, password, Email); //salva tutto nell'oggetto
+                        risposta = g.salvaUtenti(nome, password, Email); //Salva tutto nell'oggetto
                         
                         scrittore.println(risposta);
 
@@ -97,7 +99,7 @@ public class ServerAction implements Runnable {
                 }
             } while (!protocollo.equals("exit"));
 
-            //aspetta il messaggio del client
+            //Aspetta il messaggio del client
             ricevi.close();
             scrittore.close();
             clientSocket.close();

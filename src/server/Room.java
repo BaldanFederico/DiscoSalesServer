@@ -9,16 +9,23 @@ import java.net.*;
 import java.util.*;
 
 /**
- *
- * @author dell
+ *La classe gestisce i dati della room 
+ * @author DiscoSales
  */
 public class Room {
     private Socket clientSocket;
     private String nomeRoom;
-    private String owner;//un id univoco per ogni utente
-    private String RoomID; //un id univoco per la room
+    private String owner;//Un id univoco per ogni utente
+    private String RoomID; //Un id univoco per la room
     private String partecipante;
-
+/**
+ * Costruttore che instanzia l'utente
+ * @param clientSocket ClientSocket
+ * @param nomeRoom Nome della room
+ * @param owner Proprietario della room
+ * @param RoomID Codice della room
+ * @param partecipante Client
+ */
     public Room(Socket clientSocket, String nomeRoom, String owner, String RoomID, String partecipante) {
         this.clientSocket = clientSocket;
         this.nomeRoom = nomeRoom;
@@ -47,7 +54,10 @@ public class Room {
     public Socket getClientSocket() {
         return clientSocket;
     }
-
+/**
+ * Il metodo ritorna una stringa con i dati della chatroom
+ * @return Dati della chatroom
+ */
     @Override
     public String toString() {
         return "Room{" + "clientSocket=" + clientSocket + ", nomeRoom=" + nomeRoom + ", owner=" + owner + ", RoomID=" + RoomID + ", partecipante=" + partecipante + '}';
