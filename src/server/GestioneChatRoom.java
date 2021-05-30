@@ -218,7 +218,7 @@ public class GestioneChatRoom {
                 for (int x = 0; x < cliente.size(); x++) {
                     System.out.println(cliente.get(x).getInetAddress().toString());
                    
-                    if (cliente.get(x).getInetAddress().equals(room.get(i).getClientSocket())) {
+                    if (cliente.get(x).getInetAddress().equals(room.get(i).getClientSocket().getInetAddress())) {
                         System.out.println("scirvi2323234");
                         PrintWriter scrittore = new PrintWriter(cliente.get(i).getOutputStream(), true);
                         scrittore.println("[" + partecipante + "]: " + messaggio);
